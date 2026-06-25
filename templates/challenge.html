@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SQL Injection — VulnCTF</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back">&#8592; back to dashboard</a>
+
+        <div class="challenge-box">
+            <h2>SQL Injection</h2>
+            <div class="desc">
+                <strong>Objective:</strong> Bypass the login form without knowing valid credentials.
+            </div>
+            <div class="hint">
+                hint: the query does not sanitize your input. try <code>' OR 1=1 --</code> as the username.
+            </div>
+
+            <form method="POST">
+                <input type="text" name="username" placeholder="username" required>
+                <input type="password" name="password" placeholder="password" required>
+                <button type="submit">login</button>
+            </form>
+
+            {% if message %}
+            <div class="output {% if 'FLAG' in message %}flag{% endif %}">{{ message | safe }}</div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

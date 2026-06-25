@@ -1,0 +1,15 @@
+venv/
+__pycache__/
+*.pyc
+*.db
+.env
+.DS_Store
+.vscode/
+.idea/
+*.log
+test_stdout*.txt
+test_stderr*.txt
+stderr.txt
+stdout.txt
+test_err*.txt
+test_out*.txt

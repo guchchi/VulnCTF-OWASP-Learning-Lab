@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Path Traversal — VulnCTF</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back">&#8592; back to dashboard</a>
+
+        <div class="challenge-box">
+            <h2>Path Traversal</h2>
+            <div class="desc">
+                <strong>Objective:</strong> Read the <code>secret.txt</code> file on the server.
+            </div>
+            <div class="hint">
+                hint: the file parameter trusts your input. try <code>../</code> to navigate directories.
+            </div>
+
+            <form method="GET">
+                <input type="text" name="file" placeholder="filename..." style="width:60%" value="{{ filename }}">
+                <button type="submit">read</button>
+            </form>
+
+            {% if content %}
+            <div class="output {% if 'FLAG' in content %}flag{% endif %}">{{ content }}</div>
+            {% endif %}
+
+            <p style="font-size:0.85em; color: var(--text-muted);">try: <code>?file=secret.txt</code> &bull; <code>?file=../secret.txt</code></p>
+        </div>
+    </div>
+</body>
+</html>

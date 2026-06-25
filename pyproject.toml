@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.backends._legacy:_Backend"
+
+[project]
+name = "vulnctf"
+version = "1.0.0"
+description = "OWASP Top 10 CTF-style learning lab"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "MIT"}
+keywords = ["cybersecurity", "ctf", "owasp-top-10", "web-security", "educational"]
+
+[project.urls]
+Source = "https://github.com/guchchi/VulnCTF-OWASP-Learning-Lab"

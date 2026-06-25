@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Stored XSS — VulnCTF</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back">&#8592; back to dashboard</a>
+
+        <div class="challenge-box">
+            <h2>Stored XSS</h2>
+            <div class="desc">
+                <strong>Objective:</strong> Find the flag the admin left in a comment.
+            </div>
+            <div class="hint">
+                hint: look closely at every comment. the flag might be hiding in plain sight — or inside a <code>&lt;script&gt;</code> tag.
+            </div>
+
+            <form method="POST">
+                <input type="text" name="comment" placeholder="add a comment..." style="width:60%">
+                <button type="submit">post</button>
+            </form>
+
+            <form method="GET">
+                <input type="text" name="search" placeholder="search comments..." style="width:60%">
+                <button type="submit">search</button>
+            </form>
+
+            {% if search %}
+            <div class="output">searching for: {{ search | safe }}</div>
+            {% endif %}
+
+            <div class="posts">
+                {% for post in posts %}
+                <div class="post">
+                    <strong>{{ post.user }}</strong> {{ post.content | safe }}
+                </div>
+                {% endfor %}
+            </div>
+
+            {% if message %}
+            <div class="output">{{ message }}</div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>VulnCTF — Solution Write-up</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back">&#8592; back to dashboard</a>
+
+        <div class="header">
+            <h1><span>Solution</span> Write-up</h1>
+            <p class="subtitle">Understanding each vulnerability, its impact, and how to fix it securely</p>
+            <div class="tag-line">
+                <span class="tag green">owasp top 10</span>
+                <span class="tag teal">remediation focused</span>
+                <span class="tag purple">portfolio piece</span>
+            </div>
+        </div>
+
+        <div class="educational-note">
+            <strong>&#9888; Educational Note:</strong> This write-up explains vulnerabilities in a controlled local lab
+            environment. Understanding how attacks work is essential for building secure systems. The goal is always
+            defence and remediation, not misuse.
+        </div>
+
+        <!-- SQL Injection -->
+        <div class="solution">
+            <h3>1. SQL Injection</h3>
+
+            <h4>What is the issue?</h4>
+            <p>SQL Injection occurs when user input is directly concatenated into a SQL query string without sanitization or parameterization. An attacker can inject SQL syntax to alter the query's logic, potentially bypassing authentication, accessing unauthorized data, or modifying the database.</p>
+
+            <h4>Where it appears in this project</h4>
+            <p>In <code>app.py</code>, the login route builds a query using Python f-strings:</p>
+            <pre>query = f"SELECT * FROM users WHERE username='{username}' AND password='{password}'"</pre>
+            <p>The <code>username</code> and <code>password</code> form fields are inserted directly into the SQL string without any escaping or validation.</p>
+
+            <h4>Why it is risky</h4>
+            <p>An attacker can bypass authentication entirely by entering <code>' OR 1=1 --</code> as the username. The resulting query becomes:</p>
+            <pre>SELECT * FROM users WHERE username='' OR 1=1 --' AND password='...'</pre>
+            <p><code>OR 1=1</code> evaluates to true for every row, so the query returns all users. The <code>--</code> comments out the password check. In a real system, this could expose sensitive data, allow account takeover, or lead to data destruction.</p>
+
+            <h4>How the challenge is solved</h4>
+            <p>Enter <code>' OR 1=1 --</code> as the username with any password. The flag is returned upon successful login.</p>
+
+            <h4>How to fix it securely</h4>
+            <p>Use <strong>parameterized queries</strong> (also called prepared statements). User input is sent separately from the SQL structure, so it can never alter the query logic:</p>
+            <pre>cursor.execute(
+    "SELECT * FROM users WHERE username=? AND password=?",
+    (username, password)
+)</pre>
+            <p>Never concatenate user input into SQL strings. All major database libraries support parameterized queries.</p>
+        </div>
+
+        <!-- Stored XSS -->
+        <div class="solution">
+            <h3>2. Stored XSS (Cross-Site Scripting)</h3>
+
+            <h4>What is the issue?</h4>
+            <p>Stored XSS occurs when user-supplied content is saved and later rendered in a web page without proper output encoding. An attacker can inject HTML or JavaScript that executes in the browser of anyone viewing the page.</p>
+
+            <h4>Where it appears in this project</h4>
+            <p>In <code>xss.html</code>, user comments are rendered using Jinja2's <code>| safe</code> filter:</p>
+            <pre>{{ post.content | safe }}</pre>
+            <p>The <code>| safe</code> filter tells Jinja2 to skip HTML escaping, rendering the content as raw HTML. Additionally, the search functionality also reflects input unsafely.</p>
+
+            <h4>Why it is risky</h4>
+            <p>An attacker can post a comment containing malicious JavaScript that steals cookies, redirects users, or defaces the page. Since the script executes in the context of the victim's browser and session, it can access sensitive data. Reflected XSS via the search parameter allows attackers to craft links that execute scripts when clicked.</p>
+
+            <h4>How the challenge is solved</h4>
+            <p>The flag was posted by "admin" in comment #3, appended after text inside a <code>&lt;script&gt;</code> tag. View the page source or use the search feature with <code>&lt;script&gt;</code> to see the reflected content containing the flag.</p>
+
+            <h4>How to fix it securely</h4>
+            <p><strong>Never use <code>| safe</code> on user-generated content.</strong> Jinja2 auto-escapes HTML by default — removing <code>| safe</code> is sufficient for this case. For applications that need rich text, use a trusted sanitization library (e.g., Bleach, DOMPurify) to strip dangerous tags while preserving safe formatting:</p>
+            <pre>{{ post.content }}</pre>
+            <p>Always escape output by default. Validate and sanitize input if rich text is required.</p>
+        </div>
+
+        <!-- IDOR -->
+        <div class="solution">
+            <h3>3. IDOR (Insecure Direct Object Reference)</h3>
+
+            <h4>What is the issue?</h4>
+            <p>IDOR is a broken access control vulnerability where an application exposes internal object identifiers (like database IDs) and fails to verify whether the requesting user is authorized to access the requested resource.</p>
+
+            <h4>Where it appears in this project</h4>
+            <p>In <code>app.py</code>, the IDOR route accepts a user ID from the URL parameter without any authorization check:</p>
+            <pre>user_id = request.args.get("id", 1, type=int)
+user = USERS.get(user_id)</pre>
+            <p>There is no authentication or session check. Any visitor can view any user's profile by changing the <code>id</code> parameter.</p>
+
+            <h4>Why it is risky</h4>
+            <p>An attacker can enumerate user IDs to access private information belonging to other users. In a real application, this could expose personal data, financial records, or administrative functionality. Automated tools can quickly iterate through IDs.</p>
+
+            <h4>How the challenge is solved</h4>
+            <p>Visit <code>/challenge/idor?id=1</code> — user ID 1 is "admin" and their profile contains the flag.</p>
+
+            <h4>How to fix it securely</h4>
+            <p><strong>Never trust user-supplied identifiers for authorization.</strong> Always verify on the server that the authenticated user owns or is permitted to access the requested resource:</p>
+            <pre>if current_user.id != requested_user_id:
+    return "Unauthorized", 403</pre>
+            <p>Use session-based authentication rather than user-controlled IDs. Consider using UUIDs instead of sequential integers if direct object references are necessary.</p>
+        </div>
+
+        <!-- Path Traversal -->
+        <div class="solution">
+            <h3>4. Path Traversal</h3>
+
+            <h4>What is the issue?</h4>
+            <p>Path Traversal (also called Directory Traversal) occurs when user input is used to construct file paths without proper validation. An attacker can use <code>../</code> sequences to escape the intended directory and access or read arbitrary files on the server.</p>
+
+            <h4>Where it appears in this project</h4>
+            <p>In <code>app.py</code>, the file route joins user input with the base directory:</p>
+            <pre>safe_path = os.path.join(os.path.dirname(__file__), filename)
+with open(safe_path, "r") as f:
+    content = f.read()</pre>
+            <p>While <code>os.path.join()</code> is used, it does not prevent traversal — <code>../</code> sequences are resolved normally.</p>
+
+            <h4>Why it is risky</h4>
+            <p>An attacker can read sensitive files outside the web root, such as configuration files (<code>config.py</code>, <code>.env</code>), source code, password files, or system files (<code>/etc/passwd</code> on Linux). This can lead to full system compromise if credentials or secrets are exposed.</p>
+
+            <h4>How the challenge is solved</h4>
+            <p>Access <code>/challenge/file?file=secret.txt</code>. The file is in the same directory as <code>app.py</code>. Using <code>?file=../secret.txt</code> would also work.</p>
+
+            <h4>How to fix it securely</h4>
+            <p><strong>Restrict file access to a safe directory.</strong> Resolve the absolute path and verify it stays within the allowed directory:</p>
+            <pre>BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+requested_path = os.path.normpath(os.path.join(BASE_DIR, filename))
+if not requested_path.startswith(BASE_DIR):
+    return "Access denied"</pre>
+            <p>Where possible, use an allowlist of permitted filenames instead of accepting arbitrary paths. Avoid passing user input directly to filesystem operations.</p>
+        </div>
+
+        <!-- Command Injection -->
+        <div class="solution">
+            <h3>5. Command Injection</h3>
+
+            <h4>What is the issue?</h4>
+            <p>Command Injection occurs when user input is passed to a shell command without sanitization. When executed with <code>shell=True</code>, the operating system interprets shell metacharacters (<code>&&</code>, <code>|</code>, <code>;</code>, etc.), allowing an attacker to execute arbitrary commands.</p>
+
+            <h4>Where it appears in this project</h4>
+            <p>In <code>app.py</code>, the command route builds a shell command from user input:</p>
+            <pre>command = f"ping -n 1 {ip}"
+output = subprocess.check_output(command, shell=True, ...)</pre>
+            <p>The <code>ip</code> form field is inserted directly into the command string, and <code>shell=True</code> passes the entire string to the system shell.</p>
+
+            <h4>Why it is risky</h4>
+            <p>An attacker can execute any system command on the server. This can lead to complete server compromise, data exfiltration, malware installation, or lateral movement within a network. Command injection is one of the most critical web vulnerabilities due to its potential impact.</p>
+
+            <h4>How the challenge is solved</h4>
+            <p>Enter <code>127.0.0.1 && dir</code> or <code>127.0.0.1 & type secret.txt</code>. The <code>&&</code> chains the attacker's command after the ping command executes.</p>
+
+            <h4>How to fix it securely</h4>
+            <p><strong>Avoid <code>shell=True</code> entirely.</strong> Pass arguments as a list so the shell is not invoked. Strictly validate input against an expected pattern:</p>
+            <pre>import re
+if not re.match(r"^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$", ip):
+    return "Invalid IP"
+subprocess.run(["ping", "-n", "1", ip], capture_output=True)</pre>
+            <p>Prefer library-based operations instead of shell commands whenever possible. For example, use <code>icmplib</code> or <code>socket</code> instead of calling the system ping command.</p>
+        </div>
+
+        <!-- Summary -->
+        <div class="solution">
+            <h3>Portfolio Summary</h3>
+            <p>This project demonstrates hands-on understanding of <strong>5 OWASP Top 10 (2021)</strong> vulnerability categories:</p>
+            <ul>
+                <li><strong>A01:2021 — Broken Access Control</strong> — IDOR, Path Traversal</li>
+                <li><strong>A03:2021 — Injection</strong> — SQL Injection, Stored XSS, Command Injection</li>
+            </ul>
+            <p>Built with <strong>Python + Flask</strong>. Each vulnerability is intentionally introduced for educational purposes only. The write-up explains not just the exploitation technique but also the <strong>remediation</strong> — because real cybersecurity learning is understanding impact and building safer systems.</p>
+            <p style="margin-top:14px; color: var(--text-muted); font-style: italic;">&#9888; Key lesson: understanding vulnerabilities is the first step toward defending against them. Always practice responsible disclosure and never test techniques on systems without authorization.</p>
+        </div>
+
+        <div class="footer">
+            Learn the vulnerability. Understand the fix. Build securely.
+        </div>
+    </div>
+</body>
+</html>

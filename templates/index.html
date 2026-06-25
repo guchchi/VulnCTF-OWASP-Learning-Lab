@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>VulnCTF — OWASP Top 10 Learning Lab</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><span>Vuln</span>CTF</h1>
+            <p class="subtitle">OWASP Top 10 Learning Lab — 5 deliberately vulnerable challenges for local cybersecurity education</p>
+            <div class="tag-line">
+                <span class="tag green">local learning lab</span>
+                <span class="tag teal">owasp awareness</span>
+                <span class="tag orange">ctf-style flags</span>
+                <span class="tag purple">remediation included</span>
+                <span class="tag red">do not deploy publicly</span>
+            </div>
+        </div>
+
+        <div class="disclaimer">
+            <strong>&#9888; Educational Use Only:</strong> This application is <strong>intentionally vulnerable</strong>
+            and should only be run <strong>locally</strong> for learning purposes. Do not deploy publicly or use
+            these techniques against any system without explicit permission.
+        </div>
+
+        <div class="stats-bar">
+            <span class="stat-item"><span class="icon">&#9765;</span> 5 CTF Challenges</span>
+            <span class="stat-item"><span class="icon">&#128218;</span> Beginner Friendly</span>
+            <span class="stat-item"><span class="icon">&#128187;</span> Python + Flask</span>
+            <span class="stat-item"><span class="icon">&#128221;</span> Full Write-up Included</span>
+        </div>
+
+        <div class="challenges">
+            <a href="/challenge/sqli" class="card">
+                <h2><span class="num">01.</span> SQL Injection</h2>
+                <p>Understanding how unsanitized user input leads to database compromise. Learn to use parameterized queries.</p>
+                <span class="card-badge easy">easy</span>
+            </a>
+            <a href="/challenge/xss" class="card">
+                <h2><span class="num">02.</span> Stored XSS</h2>
+                <p>Exploring how unescaped user content can inject scripts. Learn why output encoding matters.</p>
+                <span class="card-badge easy">easy</span>
+            </a>
+            <a href="/challenge/idor" class="card">
+                <h2><span class="num">03.</span> IDOR</h2>
+                <p>Understanding broken access control when user IDs are not validated. Learn server-side authorization.</p>
+                <span class="card-badge easy">easy</span>
+            </a>
+            <a href="/challenge/file" class="card">
+                <h2><span class="num">04.</span> Path Traversal</h2>
+                <p>Exploring how unsanitized file paths can expose restricted files. Learn safe file access patterns.</p>
+                <span class="card-badge medium">medium</span>
+            </a>
+            <a href="/challenge/command" class="card">
+                <h2><span class="num">05.</span> Command Injection</h2>
+                <p>Understanding how unsafe shell commands allow arbitrary execution. Learn to avoid shell=True.</p>
+                <span class="card-badge medium">medium</span>
+            </a>
+            <a href="/writeup" class="card card-writeup">
+                <h2><span class="num">&#128214;</span> Solution Write-up</h2>
+                <p>Full walkthroughs explaining each vulnerability, how it works, real-world risk, and how to fix it securely.</p>
+                <span class="card-badge portfolio">portfolio</span>
+            </a>
+        </div>
+
+        <div class="footer">
+            VulnCTF — Built for cybersecurity education &middot; Python + Flask &middot; OWASP Top 10 Awareness
+        </div>
+    </div>
+</body>
+</html>

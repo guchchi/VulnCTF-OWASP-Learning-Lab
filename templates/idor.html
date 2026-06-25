@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>IDOR — VulnCTF</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back">&#8592; back to dashboard</a>
+
+        <div class="challenge-box">
+            <h2>IDOR</h2>
+            <div class="desc">
+                <strong>Objective:</strong> Access another user's profile to find their flag.
+            </div>
+            <div class="hint">
+                hint: the <code>id</code> parameter in <code>/challenge/idor?id=N</code> determines whose profile is shown. try different values.
+            </div>
+
+            <p style="margin:12px 0; font-size:0.92em; color: var(--text-secondary);">Viewing profile <strong style="color:var(--text-primary);">#{{ user_id }}</strong></p>
+
+            <div class="profile-box">
+                <p><strong>username</strong> {{ user.username }}</p>
+                <p><strong>email</strong> {{ user.email }}</p>
+                <p><strong>role</strong> {{ user.role }}</p>
+                {% if 'FLAG' in user.secret %}
+                <div class="output flag">{{ user.secret }}</div>
+                {% endif %}
+            </div>
+
+            <p style="font-size:0.85em; color: var(--text-muted);">try: <code>/challenge/idor?id=1</code> &bull; <code>/challenge/idor?id=2</code> &bull; <code>/challenge/idor?id=3</code></p>
+        </div>
+    </div>
+</body>
+</html>

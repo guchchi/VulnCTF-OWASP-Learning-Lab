@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Command Injection — VulnCTF</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back">&#8592; back to dashboard</a>
+
+        <div class="challenge-box">
+            <h2>Command Injection</h2>
+            <div class="desc">
+                <strong>Objective:</strong> The ping tool will run whatever you give it. Execute a command to find the flag.
+            </div>
+            <div class="hint">
+                hint: try appending commands with <code>&&</code>, <code>|</code>, or <code>;</code>
+            </div>
+
+            <form method="POST">
+                <input type="text" name="ip" placeholder="enter an IP address..." style="width:60%">
+                <button type="submit">ping</button>
+            </form>
+
+            {% if output %}
+            <div class="output">{{ output }}</div>
+            {% endif %}
+
+            <p style="font-size:0.85em; color: var(--text-muted);">try: <code>127.0.0.1 && dir</code> &bull; <code>127.0.0.1 & type secret.txt</code></p>
+        </div>
+    </div>
+</body>
+</html>
