@@ -1,15 +1,15 @@
 # Security Policy
 
-This repository contains an **intentionally vulnerable** educational application.
+This repository contains an **intentionally vulnerable** educational application designed for local cybersecurity learning.
 
 ## Intended Use
 
 This project is designed for:
 
-- Local cybersecurity learning
-- CTF-style practice in a controlled environment
-- Secure coding awareness
-- OWASP concept demonstration
+- Local cybersecurity learning in a controlled environment
+- Understanding common web security weaknesses through hands-on examples
+- Learning secure coding practices and defensive fixes
+- Documenting security concepts with screenshots and written analysis
 - Educational portfolio purposes
 
 ## Not Intended For
@@ -23,7 +23,7 @@ This project must **not** be used for:
 
 ## Responsible Learning
 
-The goal of this repository is to understand how vulnerabilities work and how to fix them securely. Understanding offensive techniques is essential for building strong defenses, but this knowledge must always be used responsibly and ethically.
+Understanding how vulnerabilities work is essential for building strong defenses. This knowledge must always be used responsibly and ethically — to protect systems, not to compromise them.
 
 ## Reporting Issues
 

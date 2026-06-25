@@ -6,7 +6,7 @@ VulnCTF is a deliberately vulnerable Flask web application created for local cyb
 
 ## Why I Built It
 
-I built this project to understand how common web vulnerabilities happen, why they are risky, and how they can be fixed securely. It demonstrates my ability to think from both an offensive and defensive perspective.
+I built this project to understand how common web vulnerabilities happen, why they are risky, and how they can be fixed securely. It demonstrates understanding of both insecure patterns and defensive coding practices.
 
 ## Vulnerabilities Covered
 
@@ -27,7 +27,11 @@ I built this project to understand how common web vulnerabilities happen, why th
 - Safe command execution practices
 - Parameterized queries
 - Secure coding mindset
-- CTF-style write-up thinking
+- Threat modeling basics
+
+## Evidence
+
+Screenshots from local testing are stored in the `screenshots/` directory. See [docs/EVIDENCE.md](EVIDENCE.md) for the current inventory.
 
 ## Responsible Learning Note
 
