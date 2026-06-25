@@ -125,9 +125,15 @@ VulnCTF/
 
 ## Screenshots & Evidence
 
-The `screenshots/` directory contains images captured during local lab testing. Each screenshot documents a specific stage of the learning flow.
+| Dashboard | SQL Injection | Stored XSS |
+|---|---|---|
+| ![Dashboard](screenshots/127.0.0.1_5000_.png) | ![SQLi](screenshots/127.0.0.1_5000_challenge_sqli.png) | ![XSS](screenshots/127.0.0.1_5000_challenge_xss.png) |
 
-*Screenshots are added as the lab is exercised and documented. See [docs/EVIDENCE.md](docs/EVIDENCE.md) for the current screenshot inventory and captions.*
+| IDOR | Path Traversal | Command Injection |
+|---|---|---|
+| ![IDOR](screenshots/127.0.0.1_5000_challenge_idor.png) | ![File](screenshots/127.0.0.1_5000_challenge_file.png) | ![Command](screenshots/127.0.0.1_5000_challenge_command.png) |
+
+Each screenshot was captured from the local lab running on `localhost:5000`. See [docs/EVIDENCE.md](docs/EVIDENCE.md) for detailed captions and what each screenshot proves.
 
 ---
 

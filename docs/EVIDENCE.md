@@ -4,24 +4,27 @@
 
 The `screenshots/` directory contains images captured during local lab testing. Below is the current inventory and what each screenshot documents.
 
-*No screenshots have been added yet. This section will be updated as screenshots are captured and placed in the `screenshots/` directory.*
+### Inventory
 
-### Planned Screenshots
+| File | What It Proves |
+|---|---|
+| `127.0.0.1_5000_.png` | Challenge dashboard showing all 5 module descriptions and safety disclaimer |
+| `127.0.0.1_5000_challenge_sqli.png` | SQL Injection challenge page with the login form vulnerable to injection |
+| `127.0.0.1_5000_challenge_xss.png` | Stored XSS challenge page showing the comment section and search feature |
+| `127.0.0.1_5000_challenge_idor.png` | IDOR challenge showing a user profile accessed via the `id` parameter |
+| `127.0.0.1_5000_challenge_file.png` | Path Traversal challenge showing the file reader interface |
+| `127.0.0.1_5000_challenge_command.png` | Command Injection challenge showing the ping tool input form |
+
+### Planned Additions
 
 | Screenshot | What It Proves |
 |---|---|
-| Dashboard | Shows the challenge listing with module descriptions |
-| SQL Injection — Attempt | Shows the login form before exploitation |
-| SQL Injection — Success | Shows the flag returned after successful SQL injection |
-| Stored XSS — Comments | Shows the comment section with user-submitted content |
-| Stored XSS — Flag | Shows the flag hidden in the admin's comment |
-| IDOR — User Profile | Shows a normal user profile |
-| IDOR — Admin Profile | Shows the admin profile with flag via ID manipulation |
-| Path Traversal — Normal | Shows file read within the intended directory |
-| Path Traversal — Flag | Shows reading secret.txt via path traversal |
-| Command Injection — Ping | Shows normal ping output |
-| Command Injection — Flag | Shows command output after injection |
-| Write-up Page | Shows the solution documentation |
+| SQL Injection — Flag Captured | Shows the flag returned after `' OR 1=1 --` injection |
+| Stored XSS — Flag Revealed | Shows the admin's comment containing the flag in page source |
+| IDOR — Admin Profile with Flag | Shows user ID 1 admin profile with flag visible |
+| Path Traversal — secret.txt | Shows the flag obtained by reading secret.txt |
+| Command Injection — Output | Shows command output after injection with `&&` chaining |
+| Write-up Page | Shows the solution documentation for a module |
 
 ## Demo Video
 
